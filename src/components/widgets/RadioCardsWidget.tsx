@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plane, Train, Car, Check, X, Search } from 'lucide-react';
+import { Plane, Train, Car, Check, X, Search, BookOpen, ClipboardList, Calendar, Target, ListChecks } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface RadioCardOption {
@@ -24,6 +24,11 @@ const iconMap: Record<string, React.ReactNode> = {
     car: <Car className="w-5 h-5" />,
     close: <X className="w-5 h-5" />,
     search: <Search className="w-5 h-5" />,
+    book: <BookOpen className="w-5 h-5" />,
+    clipboard: <ClipboardList className="w-5 h-5" />,
+    calendar: <Calendar className="w-5 h-5" />,
+    target: <Target className="w-5 h-5" />,
+    checklist: <ListChecks className="w-5 h-5" />,
 };
 
 const RadioCardsWidget: React.FC<RadioCardsWidgetProps> = ({ payload, onSubmit }) => {

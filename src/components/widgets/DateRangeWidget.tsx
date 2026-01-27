@@ -8,6 +8,7 @@ interface DateRangeWidgetProps {
         minDate?: string;
         maxDate?: string;
         defaultRange?: { start: string; end: string };
+        context?: string;
     };
     onSubmit: (response: { start: string; end: string }) => void;
 }

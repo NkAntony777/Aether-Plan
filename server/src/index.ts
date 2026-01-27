@@ -299,7 +299,13 @@ app.get("/api/search", async (req, res) => {
     }
 
     if (!response.ok) {
-      res.status(502).json({ error: "search_request_failed", status: response.status });
+      const details = await response.text().catch(() => "");
+      console.error("Brave search failed:", response.status, details.slice(0, 300));
+      res.status(502).json({
+        error: "search_request_failed",
+        status: response.status,
+        details: details ? details.slice(0, 300) : undefined,
+      });
       return;
     }
 
@@ -328,7 +334,9 @@ app.get("/api/search", async (req, res) => {
 
     res.json({ query, results });
   } catch (error) {
-    res.status(502).json({ error: error instanceof Error ? error.message : "search_failed" });
+    const message = error instanceof Error ? error.message : "search_failed";
+    console.error("Brave search error:", message);
+    res.status(502).json({ error: message });
   }
 });
 

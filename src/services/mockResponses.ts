@@ -40,46 +40,14 @@ export const mockFlights: FlightResult[] = [
 
 // Mock train data
 export const mockTrains: TrainResult[] = [
-    {
-        id: 'G2',
-        trainNumber: 'G2',
-        trainType: '高铁',
-        departure: { time: '07:00', station: '上海虹桥' },
-        arrival: { time: '11:36', station: '北京南' },
-        duration: '4h36m',
-        seats: [
-            { type: '二等座', price: 553, available: 120 },
-            { type: '一等座', price: 933, available: 45 },
-            { type: '商务座', price: 1748, available: 12 },
-        ],
-    },
-    {
-        id: 'G10',
-        trainNumber: 'G10',
-        trainType: '高铁',
-        departure: { time: '09:00', station: '上海虹桥' },
-        arrival: { time: '13:28', station: '北京南' },
-        duration: '4h28m',
-        seats: [
-            { type: '二等座', price: 553, available: 85 },
-            { type: '一等座', price: 933, available: 30 },
-            { type: '商务座', price: 1748, available: 8 },
-        ],
-    },
-    {
-        id: 'G14',
-        trainNumber: 'G14',
-        trainType: '高铁',
-        departure: { time: '12:00', station: '上海虹桥' },
-        arrival: { time: '16:28', station: '北京南' },
-        duration: '4h28m',
-        seats: [
-            { type: '二等座', price: 553, available: 200 },
-            { type: '一等座', price: 933, available: 60 },
-            { type: '商务座', price: 1748, available: 15 },
-        ],
-    },
+    { train_no: 'G2', start_train_code: 'G2', start_time: '07:00', arrive_time: '11:36', price: 553 },
+    { train_no: 'G10', start_train_code: 'G10', start_time: '09:00', arrive_time: '13:28', price: 553 },
+    { train_no: 'G14', start_train_code: 'G14', start_time: '12:00', arrive_time: '16:28', price: 553 },
 ];
+
+export const getMockTrains = (_origin: string, _destination: string): TrainResult[] => {
+    return mockTrains;
+};
 
 // Mock hotel data
 export const mockHotels: PlaceInfo[] = [
@@ -190,13 +158,6 @@ export const getMockFlights = (origin: string, destination: string): FlightResul
     }));
 };
 
-export const getMockTrains = (origin: string, destination: string): TrainResult[] => {
-    return mockTrains.map(t => ({
-        ...t,
-        departure: { ...t.departure, station: `${origin}站` },
-        arrival: { ...t.arrival, station: `${destination}站` },
-    }));
-};
 
 export const getMockHotels = (destination: string): PlaceInfo[] => {
     return mockHotels.map(h => ({

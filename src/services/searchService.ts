@@ -9,6 +9,8 @@ export interface WebSearchResponse {
     success: boolean;
     results?: WebSearchResult[];
     error?: string;
+    status?: number;
+    details?: string;
 }
 
 interface SearchOptions {
@@ -60,7 +62,13 @@ export async function searchWeb(query: string, options: SearchOptions = {}): Pro
 
         const data = await response.json().catch(() => ({} as Record<string, unknown>));
         if (!response.ok) {
-            return { success: false, error: (data as { error?: string }).error || `http_${response.status}` };
+            const errorPayload = data as { error?: string; status?: number; details?: string };
+            return {
+                success: false,
+                error: errorPayload.error || `http_${response.status}`,
+                status: errorPayload.status || response.status,
+                details: errorPayload.details,
+            };
         }
         return { success: true, results: (data as { results?: WebSearchResult[] }).results || [] };
     } catch (error) {

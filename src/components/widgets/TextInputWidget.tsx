@@ -1,6 +1,6 @@
 import React, { useState, type KeyboardEvent } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Send } from 'lucide-react';
+import { MapPin, Send, Type } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface TextInputWidgetProps {
@@ -8,6 +8,8 @@ interface TextInputWidgetProps {
         placeholder?: string;
         label?: string;
         icon?: 'location' | 'text';
+        context?: string;
+        fieldKey?: string;
     };
     onSubmit: (response: string) => void;
 }
@@ -16,6 +18,7 @@ const TextInputWidget: React.FC<TextInputWidgetProps> = ({ payload, onSubmit }) 
     const [value, setValue] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const { placeholder = '请输入...', label, icon: _icon = 'text' } = payload;
+    const icon = _icon === 'location' ? <MapPin className="w-5 h-5" /> : <Type className="w-5 h-5" />;
 
     const handleSubmit = () => {
         const trimmed = value.trim();
@@ -48,7 +51,7 @@ const TextInputWidget: React.FC<TextInputWidgetProps> = ({ payload, onSubmit }) 
 
             <div className="flex items-center gap-2 bg-white rounded-xl border border-stone-100 shadow-soft p-2 transition-all duration-300 focus-within:shadow-elevated focus-within:border-stone-200">
                 <div className="pl-2 text-stone-400">
-                    <MapPin className="w-5 h-5" />
+                    {icon}
                 </div>
 
                 <input

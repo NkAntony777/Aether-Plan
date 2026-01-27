@@ -7,6 +7,9 @@ import PlaceCardsWidget from './PlaceCardsWidget';
 import FlightResultsWidget from './FlightResultsWidget';
 import TrainResultsWidget from './TrainResultsWidget';
 import HotelSearchContainer from './HotelSearchContainer';
+import ChecklistWidget from './ChecklistWidget';
+import MarkdownCardWidget from './MarkdownCardWidget';
+import ResourceListWidget from './ResourceListWidget';
 import type { FlightOffer } from '../../services/flightService';
 import type { TicketInfo } from '../../services/trainLogic';
 import type { HotelInfo } from './HotelSearchWidget';
@@ -130,7 +133,7 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({ message, onSubmit }) =>
         case 'date_range':
             return (
                 <DateRangeWidget
-                    payload={payload as { minDate?: string; maxDate?: string }}
+                    payload={payload as { minDate?: string; maxDate?: string; context?: string }}
                     onSubmit={onSubmit}
                 />
             );
@@ -138,7 +141,7 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({ message, onSubmit }) =>
         case 'text_input':
             return (
                 <TextInputWidget
-                    payload={payload as { placeholder?: string; label?: string; icon?: 'location' | 'text' }}
+                    payload={payload as { placeholder?: string; label?: string; icon?: 'location' | 'text'; context?: string }}
                     onSubmit={onSubmit}
                 />
             );
@@ -184,6 +187,28 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({ message, onSubmit }) =>
                 <TrainResultsWidget
                     payload={payload as { tickets: TicketInfo[]; title?: string; origin?: string; destination?: string; date?: string }}
                     onSubmit={onSubmit}
+                />
+            );
+
+        case 'checklist':
+            return (
+                <ChecklistWidget
+                    payload={payload as { title?: string; items: Array<{ id: string; label: string; description?: string; checked?: boolean }>; selectable?: boolean }}
+                    onSubmit={onSubmit}
+                />
+            );
+
+        case 'markdown_card':
+            return (
+                <MarkdownCardWidget
+                    payload={payload as { title?: string; content: string }}
+                />
+            );
+
+        case 'resource_list':
+            return (
+                <ResourceListWidget
+                    payload={payload as { title?: string; resources: Array<{ id: string; title: string; type?: string; description?: string; url?: string }> }}
                 />
             );
 

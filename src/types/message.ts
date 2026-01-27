@@ -59,6 +59,10 @@ export type WidgetType =
     | 'image_gallery'
     | 'weather_card'
     | 'currency_converter'
+    // Universal planning
+    | 'checklist'
+    | 'markdown_card'
+    | 'resource_list'
     // Confirmation
     | 'confirm_button'
     | 'action_buttons'
@@ -145,6 +149,9 @@ export interface CollectedData {
     draftPlan?: string;
     webEnrichedPlan?: string;
     webSources?: { title: string; url: string; description?: string }[];
+    planType?: 'travel' | 'study' | 'project' | 'event' | 'life' | 'other';
+    goal?: string;
+    domainSlots?: Record<string, unknown>;
 }
 
 // API configuration
