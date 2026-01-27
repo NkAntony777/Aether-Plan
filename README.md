@@ -43,17 +43,17 @@ Aether Plan understands different domains and adapts its assistance accordingly:
 
 ### 📸 Visual Tour
 
-| Intelligent Chat | Map Visualization |
+| Intelligent Intent Detection | Date & Time Planning |
 |:---:|:---:|
-| ![Chat Interface](src/assets/demo-01.png)<br>_Natural conversation for any plan_ | ![Map View](src/assets/demo-03.png)<br>_Interactive location exploration_ |
+| ![Deep Understanding](src/assets/intelligent_purpose_detection.png)<br>_Automatically identifies intent (Travel, Study, Life)_ | ![Date Selection](src/assets/date_calendar_select.png)<br>_Intuitive calendar and timeframe selection_ |
 
-| Flight Search | Local Attractions |
+| Flight Search & Smart Map | Hotel Search |
 |:---:|:---:|
-| ![Flights](src/assets/demo-04.png)<br>_Real-time flight options_ | ![Attractions](src/assets/demo-07.png)<br>_Discover nearby gems_ |
+| ![Flight Search](src/assets/flight_search.png)<br>_Visualize routes and flight paths on the map_ | ![Hotel Search](src/assets/hotel_search.png)<br>_Find the perfect stay with rich filters_ |
 
-| Travel Planning | Comprehensive Results |
+| Hotel Details | Comprehensive Plan Output |
 |:---:|:---:|
-| ![Planning](src/assets/side-panel-demo.png)<br>_Structured timeline generation_ | ![Results](src/assets/demo-08.png)<br>_Rich data presentation_ |
+| ![Hotel Details](src/assets/hotel_detail.png)<br>_View amenities, room types, and prices_ | ![Markdown Plan](src/assets/markdown_output.png)<br>_Generate structured, exportable Markdown plans_ |
 
 > *Note: While the screenshots highlight travel features, the underlying engine supports Study, Project, and Event planning with equal depth.*
 
@@ -107,17 +107,17 @@ Aether Plan 深度理解不同领域的规划需求，并自动适配助手模�
 
 ### 📸 精彩预览
 
-| 智能对话 | 地图可视化 |
+| 智能意图识别 | 日期与时间规划 |
 |:---:|:---:|
-| ![Chat Interface](src/assets/demo-01.png)<br>_自然语言处理任意计划_ | ![Map View](src/assets/demo-03.png)<br>_交互式地点探索_ |
+| ![Deep Understanding](src/assets/intelligent_purpose_detection.png)<br>_自动识别规划意图（旅行、学习、生活）_ | ![Date Selection](src/assets/date_calendar_select.png)<br>_直观的日历与时间段选择_ |
 
-| 航班查询 | 景点推荐 |
+| 航班查询与智能地图 | 酒店搜索 |
 |:---:|:---:|
-| ![Flights](src/assets/demo-04.png)<br>_实时获取航班信息_ | ![Attractions](src/assets/demo-07.png)<br>_发现周边热门景点_ |
+| ![Flight Search](src/assets/flight_search.png)<br>_在地图上可视化航线与路径_ | ![Hotel Search](src/assets/hotel_search.png)<br>_通过丰富筛选找到完美住宿_ |
 
-| 行程规划 | 详尽结果 |
+| 酒店详情 | 全能计划输出 |
 |:---:|:---:|
-| ![Planning](src/assets/side-panel-demo.png)<br>_结构化生成时间线_ | ![Results](src/assets/demo-08.png)<br>_丰富的数据展示_ |
+| ![Hotel Details](src/assets/hotel_detail.png)<br>_查看设施、房型与实时价格_ | ![Markdown Plan](src/assets/markdown_output.png)<br>_生成结构化、可导出的 Markdown 计划书_ |
 
 > *注：虽然截图主要展示了旅行场景，但 Aether Plan 的核心引擎同样完美支持学习、项目和活动规划。*
 
