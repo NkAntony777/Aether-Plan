@@ -1,12 +1,11 @@
-# 🌍 Aether Plan - AI Travel Assistant
+# 🌌 Aether Plan - AI Universal Planner
 
 <div align="center">
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-B73C96?style=for-the-badge&logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=Leaflet&logoColor=white)
+![AI-Powered](https://img.shields.io/badge/AI-Powered-FF4081?style=for-the-badge&logo=openai&logoColor=white)
+![Plan-Everything](https://img.shields.io/badge/Plan-Everything-brightgreen?style=for-the-badge)
 
 [English](#english) | [中文](#chinese)
 
@@ -17,28 +16,46 @@
 <a name="english"></a>
 ## 🇬🇧 English Introduction
 
-**Aether Plan** is an intelligent travel planning assistant powered by AI. It combines a rich chat interface with interactive map widgets to help you plan your perfect trip effortlessly. Whether you are looking for flights, trains, hotels, or tourist attractions, Aether Plan provides real-time data and visual suggestions.
+**Aether Plan** is not just a travel assistant—it is your **AI-powered Universal Planner**. Whether you are coordinating a complex trip, organizing a large event, managing a team project, or setting personal life goals, Aether Plan provides intelligent, context-aware support.
 
-### ✨ Key Features
+### ✨ Plan Everything
 
--   **🤖 AI Chat Interface**: Conversational travel planning with context awareness.
--   **🗺️ Interactive Map Widgets**: Visualize locations, routes, and points of interest directly in the chat.
--   **✈️ Flight & 🚄 Train Search**: Integrated search for transportation options with real-time pricing (simulated/integrated).
--   **🏨 Hotel & 🍽️ Dining**: Find the best places to stay and eat with detailed cards.
--   **📝 Smart Itineraries**: Auto-generate travel checklists and day-by-day plans.
--   **🎨 Markdown Support**: Rich text rendering for detailed travel guides.
+Aether Plan understands different domains and adapts its assistance accordingly:
 
-### 📸 Screenshots
+-   **🌍 Travel Planning**: Intelligent itinerary generation, real-time flight (Amadeus) & train (12306) search, hotel booking, and interactive map visualizations (Amap/Leaflet).
+-   **🎓 Study Goals**: Design learning paths, track curriculum progress, and manage exam preparation schedules.
+-   **💼 Project Management**: Breakdown requirements into milestones, define team roles, and track deliverables.
+-   **📅 Event Organization**: Comprehensive checklists for venues, budgets, and timelines for events of any scale.
+-   **🏠 Life & Habits**: Set personal goals, build daily routines, and track habit formation.
 
-| Chat & Planning | Map Visualization |
+### 🎨 Key Features
+
+-   **🤖 Context-Aware AI Chat**: Discuss your plans naturally. The AI understands intent and switches modes automatically.
+-   **🗺️ Rich Interactive Widgets**:
+    -   **Map View**: Visual exploration of POIs and routes.
+    -   **Cards**: Detailed info for Hotels, Flights, and Attractions.
+    -   **Timelines**: Visual Gantt-style charts for project/study plans.
+-   **🛠️ Powerful Integrations**:
+    -   **Amap (HighNavi)**: POI search, geocoding, and route planning.
+    -   **12306**: Real-time train ticket queries.
+    -   **Amadeus**: Global flight data.
+-   **📝 Export & Share**: Generate Markdown reports or image snapshots of your plans.
+
+### 📸 Visual Tour
+
+| Intelligent Chat | Map Visualization |
 |:---:|:---:|
-| ![Chat Interface](src/assets/demo-01.png) | ![Map View](src/assets/demo-03.png) |
+| ![Chat Interface](src/assets/demo-01.png)<br>_Natural conversation for any plan_ | ![Map View](src/assets/demo-03.png)<br>_Interactive location exploration_ |
 
 | Flight Search | Local Attractions |
 |:---:|:---:|
-| ![Flights](src/assets/demo-04.png) | ![Attractions](src/assets/demo-07.png) |
+| ![Flights](src/assets/demo-04.png)<br>_Real-time flight options_ | ![Attractions](src/assets/demo-07.png)<br>_Discover nearby gems_ |
 
-> *Note: Images serve as a demonstration of the UI capabilities.*
+| Travel Planning | Comprehensive Results |
+|:---:|:---:|
+| ![Planning](src/assets/side-panel-demo.png)<br>_Structured timeline generation_ | ![Results](src/assets/demo-08.png)<br>_Rich data presentation_ |
+
+> *Note: While the screenshots highlight travel features, the underlying engine supports Study, Project, and Event planning with equal depth.*
 
 ### 🚀 Getting Started
 
@@ -58,36 +75,51 @@
     npm run dev
     ```
 
-4.  **Build for production**
-    ```bash
-    npm run build
-    ```
-
 ---
 
 <a name="chinese"></a>
 ## 🇨🇳 中文介绍
 
-**Aether Plan (天宫计划)** 是一款由 AI 驱动的智能旅行助手。它结合了丰富的对话界面和交互式地图组件，助您轻松规划完美旅程。无论您是在寻找航班、火车票、酒店，还是热门景点，Aether Plan 都能为您提供实时数据和可视化建议。
+**Aether Plan (天宫计划)** 不仅仅是一个旅行助手，它是您的 **AI 全能规划师**。无论您是计划一场复杂的跨国旅行、筹备大型活动、管理团队项目，还是设定个人生活目标，Aether Plan 都能提供智能、情境感知的全方位支持。
 
-### ✨ 核心功能
+### ✨ 万物皆可规划
 
--   **🤖 AI 智能对话**: 具备上下文感知的对话式旅行规划体验。
--   **🗺️ 交互式地图组件**: 直接在对话中可视化地点、路线和兴趣点。
--   **✈️ 航班 & 🚄 火车查询**: 集成交通方案搜索，实时展示价格与班次信息。
--   **🏨 酒店 & 🍽️ 餐饮推荐**: 通过详细的卡片形式展示最佳住宿和餐饮选择。
--   **📝 智能行程单**: 自动生成旅行清单和每日行程规划。
--   **🎨 Markdown 支持**: 支持富文本渲染，生成详细的旅行指南。
+Aether Plan 深度理解不同领域的规划需求，并自动适配助手模式：
 
-### 📸 界面展示
+-   **🌍 旅行规划**: 智能生成行程单，实时查询航班 (Amadeus) 与高铁 (12306)，集成高德地图 (Amap) 实现沉浸式地点探索。
+-   **🎓 学习成长**: 定制学习路线图，拆解考试复习计划，追踪学习进度。
+-   **💼 项目管理**: 将复杂需求拆解为里程碑，定义团队角色，管理关键交付物。
+-   **📅 活动筹备**: 为各类活动提供从场地筛选到预算管理的的全流程核对清单。
+-   **🏠 生活目标**: 设定生活愿景，建立习惯追踪体系，管理每日行动清单。
 
-| 对话与规划 | 地图可视化 |
+### 🎨 核心特性
+
+-   **🤖 上下文感知 AI**: 自然流畅的对话体验。AI 能自动识别您的意图并在不同规划模式间无缝切换。
+-   **🗺️ 丰富的交互组件**:
+    -   **地图视图**: 直观展示地点分布与路线规划。
+    -   **多维卡片**: 酒店、航班、景点详情一目了然。
+    -   **时间线**: 为项目和学习计划自动生成甘特图或阶段表。
+-   **🛠️ 强力数据集成**:
+    -   **高德地图**: 精准的 POI 搜索与地理编码。
+    -   **12306**: 实时火车票余票查询。
+    -   **Amadeus**: 全球航班数据覆盖。
+-   **📝 导出与分享**: 一键生成 Markdown 报告或图片快照，分享您的完美计划。
+
+### 📸 精彩预览
+
+| 智能对话 | 地图可视化 |
 |:---:|:---:|
-| ![Chat Interface](src/assets/demo-01.png) | ![Map View](src/assets/demo-03.png) |
+| ![Chat Interface](src/assets/demo-01.png)<br>_自然语言处理任意计划_ | ![Map View](src/assets/demo-03.png)<br>_交互式地点探索_ |
 
 | 航班查询 | 景点推荐 |
 |:---:|:---:|
-| ![Flights](src/assets/demo-04.png) | ![Attractions](src/assets/demo-07.png) |
+| ![Flights](src/assets/demo-04.png)<br>_实时获取航班信息_ | ![Attractions](src/assets/demo-07.png)<br>_发现周边热门景点_ |
+
+| 行程规划 | 详尽结果 |
+|:---:|:---:|
+| ![Planning](src/assets/side-panel-demo.png)<br>_结构化生成时间线_ | ![Results](src/assets/demo-08.png)<br>_丰富的数据展示_ |
+
+> *注：虽然截图主要展示了旅行场景，但 Aether Plan 的核心引擎同样完美支持学习、项目和活动规划。*
 
 ### 🚀 快速开始
 
@@ -105,11 +137,6 @@
 3.  **启动开发服务器**
     ```bash
     npm run dev
-    ```
-
-4.  **构建生产版本**
-    ```bash
-    npm run build
     ```
 
 ---
