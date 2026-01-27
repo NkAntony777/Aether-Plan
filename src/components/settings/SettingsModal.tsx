@@ -29,6 +29,7 @@ const SettingsModal: React.FC = () => {
     const [testStatus, setTestStatus] = React.useState<TestStatus>('idle');
     const [testMessage, setTestMessage] = React.useState('');
     const [useCustomModel, setUseCustomModel] = React.useState(Boolean(config.llm.customModel));
+    const useServerKeys = (import.meta as { env?: Record<string, string> }).env?.VITE_USE_SERVER_KEYS === 'true';
 
     const currentProvider = LLM_PROVIDERS.find(p => p.id === config.llm.provider);
 
@@ -40,29 +41,34 @@ const SettingsModal: React.FC = () => {
 
     // Test API connectivity
     const handleTestAPI = async () => {
-        if (!config.llm.apiKey) {
+        if (!useServerKeys && !config.llm.apiKey) {
             setTestStatus('error');
-            setTestMessage('请先填写 API Key');
+            setTestMessage('Please enter an API key first.');
             return;
         }
 
         setTestStatus('testing');
-        setTestMessage('正在测试连接...');
+        setTestMessage('Testing connection...');
 
         try {
             const model = useCustomModel && config.llm.customModel
                 ? config.llm.customModel
                 : config.llm.model;
 
-            const response = await fetch(`${config.llm.baseUrl}/chat/completions`, {
+            const base = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE || '';
+            const token = (import.meta as { env?: Record<string, string> }).env?.VITE_API_TOKEN;
+            const proxyUrl = base ? `${base.replace(/\/$/, '')}/api/llm/chat` : '/api/llm/chat';
+
+            const response = await fetch(useServerKeys ? proxyUrl : `${config.llm.baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${config.llm.apiKey}`,
-                    ...(config.llm.provider === 'anthropic' ? {
+                    ...(useServerKeys ? {} : { Authorization: `Bearer ${config.llm.apiKey}` }),
+                    ...(config.llm.provider === 'anthropic' && !useServerKeys ? {
                         'x-api-key': config.llm.apiKey,
                         'anthropic-version': '2023-06-01',
                     } : {}),
+                    ...(useServerKeys && token ? { 'x-aether-token': token } : {}),
                 },
                 body: JSON.stringify({
                     model,
@@ -72,18 +78,18 @@ const SettingsModal: React.FC = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                const data = await response.json().catch(() => ({}));
                 const modelUsed = data.model || model;
                 setTestStatus('success');
-                setTestMessage(`✓ 连接成功！模型: ${modelUsed}`);
+                setTestMessage(`Connection OK: ${modelUsed}`);
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 setTestStatus('error');
-                setTestMessage(errorData.error?.message || `错误: ${response.status}`);
+                setTestMessage(errorData.error?.message || `Connection failed: ${response.status}`);
             }
         } catch (error) {
             setTestStatus('error');
-            setTestMessage(error instanceof Error ? error.message : '网络请求失败');
+            setTestMessage(error instanceof Error ? error.message : 'Connection failed');
         }
     };
 
@@ -107,8 +113,15 @@ const SettingsModal: React.FC = () => {
                     onClick={e => e.stopPropagation()}
                 >
                     {/* Header */}
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-stone-100">
-                        <h2 className="text-xl font-serif font-medium text-stone-900">API Configuration</h2>
+                    <div className="flex items-start justify-between px-6 py-4 border-b border-stone-100">
+                        <div>
+                            <h2 className="text-xl font-serif font-medium text-stone-900">API Configuration</h2>
+                            {useServerKeys && (
+                                <p className="mt-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600">
+                                    Server key mode enabled. Keys are read from backend environment variables.
+                                </p>
+                            )}
+                        </div>
                         <button
                             onClick={closeConfig}
                             className="w-8 h-8 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition-colors"
@@ -198,9 +211,10 @@ const SettingsModal: React.FC = () => {
                                     </label>
                                     <input
                                         type="password"
-                                        value={config.llm.apiKey}
+                                        value={useServerKeys ? '' : config.llm.apiKey}
                                         onChange={e => { updateLLMApiKey(e.target.value); setTestStatus('idle'); }}
-                                        placeholder="sk-..."
+                                        placeholder={useServerKeys ? 'Managed by server' : 'sk-...'}
+                                        disabled={useServerKeys}
                                         className="w-full px-4 py-3 bg-stone-50 rounded-xl border border-stone-100 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-300 transition-colors"
                                     />
                                 </div>
@@ -397,9 +411,10 @@ const SettingsModal: React.FC = () => {
                                             <label className="text-sm font-medium text-stone-700">API Key</label>
                                             <input
                                                 type="password"
-                                                value={config.amadeus.apiKey}
+                                                value={useServerKeys ? '' : config.amadeus.apiKey}
                                                 onChange={e => updateAmadeusConfig({ apiKey: e.target.value })}
-                                                placeholder="Amadeus API Key"
+                                                placeholder={useServerKeys ? 'Managed by server' : 'Amadeus API Key'}
+                                                disabled={useServerKeys}
                                                 className="w-full px-4 py-3 bg-stone-50 rounded-xl border border-stone-100 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-300 transition-colors"
                                             />
                                         </div>
@@ -407,9 +422,10 @@ const SettingsModal: React.FC = () => {
                                             <label className="text-sm font-medium text-stone-700">API Secret</label>
                                             <input
                                                 type="password"
-                                                value={config.amadeus.apiSecret}
+                                                value={useServerKeys ? '' : config.amadeus.apiSecret}
                                                 onChange={e => updateAmadeusConfig({ apiSecret: e.target.value })}
-                                                placeholder="Amadeus API Secret"
+                                                placeholder={useServerKeys ? 'Managed by server' : 'Amadeus API Secret'}
+                                                disabled={useServerKeys}
                                                 className="w-full px-4 py-3 bg-stone-50 rounded-xl border border-stone-100 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-300 transition-colors"
                                             />
                                         </div>
@@ -450,9 +466,10 @@ const SettingsModal: React.FC = () => {
                                         <label className="text-sm font-medium text-stone-700">高德 API Key</label>
                                         <input
                                             type="password"
-                                            value={config.amap.apiKey}
+                                            value={useServerKeys ? '' : config.amap.apiKey}
                                             onChange={e => updateAmapConfig({ apiKey: e.target.value })}
-                                            placeholder="高德地图 API Key"
+                                            placeholder={useServerKeys ? 'Managed by server' : '高德地图 API Key'}
+                                            disabled={useServerKeys}
                                             className="w-full px-4 py-3 bg-stone-50 rounded-xl border border-stone-100 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-300 transition-colors"
                                         />
                                     </div>

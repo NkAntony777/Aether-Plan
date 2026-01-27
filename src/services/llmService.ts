@@ -1,4 +1,4 @@
-// LLM Service - Real API integration for chat
+﻿// LLM Service - Real API integration for chat
 import { loadAPIConfig, LLM_PROVIDERS } from '../types/apiConfig';
 
 export interface ChatMessage {
@@ -52,6 +52,61 @@ export function getSystemPrompt(domain?: PlanDomain): string {
     return PROMPT_REGISTRY[domain ?? 'other'] ?? GENERAL_PROMPT;
 }
 
+const useServerKeys = (import.meta as { env?: Record<string, string> }).env?.VITE_USE_SERVER_KEYS === 'true';
+
+function buildProxyUrl(path: string): string {
+    const base = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE || '';
+    const prefix = base ? base.replace(/\/$/, '') : '';
+    return `${prefix}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+async function callLLMProxy(
+    messages: ChatMessage[],
+    payload: { model?: string; maxTokens?: number; temperature?: number }
+): Promise<LLMResponse> {
+    const token = (import.meta as { env?: Record<string, string> }).env?.VITE_API_TOKEN;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) headers['x-aether-token'] = token;
+
+    const url = buildProxyUrl('/api/llm/chat');
+    try {
+        let response = await fetch(url, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                messages,
+                model: payload.model,
+                max_tokens: payload.maxTokens ?? 2048,
+                temperature: payload.temperature ?? 0.7,
+            }),
+        });
+
+        if (!response.ok && (!url.startsWith('http') || url.startsWith('/')) && typeof window !== 'undefined') {
+            const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+            if (isLocalhost) {
+                const fallbackUrl = `http://localhost:8787/api/llm/chat`;
+                response = await fetch(fallbackUrl, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        messages,
+                        model: payload.model,
+                        max_tokens: payload.maxTokens ?? 2048,
+                        temperature: payload.temperature ?? 0.7,
+                    }),
+                });
+            }
+        }
+
+        const data = await response.json().catch(() => ({} as Record<string, unknown>));
+        if (!response.ok) {
+            return { success: false, error: (data as { error?: string }).error || `http_${response.status}` };
+        }
+        return { success: true, message: (data as { message?: string }).message || '' };
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'proxy_failed' };
+    }
+}
 
 // Call LLM API with OpenAI-compatible format
 export async function callLLM(
@@ -60,8 +115,7 @@ export async function callLLM(
 ): Promise<LLMResponse> {
     const config = loadAPIConfig();
 
-    // Check if API key is configured
-    if (!config.llm.apiKey) {
+    if (!useServerKeys && !config.llm.apiKey) {
         return {
             success: false,
             error: '请先在设置中配置 API Key',
@@ -71,7 +125,6 @@ export async function callLLM(
     const provider = LLM_PROVIDERS.find(p => p.id === config.llm.provider);
     const baseUrl = config.llm.baseUrl || provider?.baseUrl || 'https://api.openai.com/v1';
 
-    // Support custom model input
     let model = config.llm.model;
     if (config.llm.customModel) {
         model = config.llm.customModel;
@@ -79,18 +132,23 @@ export async function callLLM(
         model = config.llm.customModel || config.llm.model;
     }
 
-    // Prepare messages with system prompt
     const systemPrompt = options?.systemPrompt || getSystemPrompt(options?.domain);
     const fullMessages: ChatMessage[] = [{ role: 'system', content: systemPrompt }, ...messages];
 
+    if (useServerKeys) {
+        return callLLMProxy(fullMessages, {
+            model,
+            maxTokens: options?.maxTokens,
+            temperature: options?.temperature,
+        });
+    }
+
     try {
-        // OpenAI-compatible API call
         const response = await fetch(`${baseUrl}/chat/completions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${config.llm.apiKey}`,
-                // Anthropic uses different header
                 ...(config.llm.provider === 'anthropic' ? {
                     'x-api-key': config.llm.apiKey,
                     'anthropic-version': '2023-06-01',
@@ -133,7 +191,6 @@ export async function callLLM(
         };
     }
 }
-
 // Extract destination from text - now supports any city-like name
 export function extractDestination(input: string): string | null {
     const patterns = [
@@ -193,9 +250,16 @@ function extractDates(input: string): { start: string; end: string } | null {
             const startDay = match[2].padStart(2, '0');
             const endMonth = match[3].padStart(2, '0');
             const endDay = match[4].padStart(2, '0');
+            const startMonthNum = Number(match[1]);
+            const startDayNum = Number(match[2]);
+            const endMonthNum = Number(match[3]);
+            const endDayNum = Number(match[4]);
+            const endYear = endMonthNum < startMonthNum || (endMonthNum === startMonthNum && endDayNum < startDayNum)
+                ? year + 1
+                : year;
             return {
                 start: `${year}-${startMonth}-${startDay}`,
-                end: `${year}-${endMonth}-${endDay}`,
+                end: `${endYear}-${endMonth}-${endDay}`,
             };
         }
     }
@@ -204,9 +268,9 @@ function extractDates(input: string): { start: string; end: string } | null {
 
 // Extract transport mode from text
 function extractTransport(input: string): 'flight' | 'train' | 'drive' | null {
-    if (/(\u98de\u673a|\u822a\u73ed|\u673a\u7968)/.test(input)) return 'flight';
-    if (/(\u9ad8\u94c1|\u706b\u8f66|\u52a8\u8f66|\u5217\u8f66)/.test(input)) return 'train';
-    if (/(\u81ea\u9a7e|\u5f00\u8f66|\u79df\u8f66)/.test(input)) return 'drive';
+    if (/(\u98de\u673a|\u822a\u73ed|\u673a\u7968|flight|plane)/i.test(input)) return 'flight';
+    if (/(\u9ad8\u94c1|\u706b\u8f66|\u52a8\u8f66|\u5217\u8f66|train|rail)/i.test(input)) return 'train';
+    if (/(\u81ea\u9a7e|\u5f00\u8f66|\u79df\u8f66|drive|car)/i.test(input)) return 'drive';
     return null;
 }
 
@@ -229,8 +293,13 @@ export function detectIntentLocally(input: string): {
     const eventKeywords = ['\u6d3b\u52a8', '\u4f1a\u8bae', '\u53d1\u5e03\u4f1a', '\u5a5a\u793c', '\u805a\u4f1a', '\u6d3e\u5bf9', '\u6d3e\u5c0d', '\u751f\u65e5', '\u5e86\u795d', '\u5468\u5e74', '\u56e2\u5efa', '\u5e74\u4f1a', '\u665a\u4f1a', '\u9152\u4f1a', '\u6c99\u9f99', '\u8bba\u575b', '\u5c55\u4f1a', '\u805a\u9910', 'event', 'conference', 'party'];
     const lifeKeywords = ['\u751f\u6d3b', '\u4e60\u60ef', '\u5065\u8eab', '\u996e\u98df', '\u4f5c\u606f', '\u4eba\u751f', 'life plan', 'habit'];
     const travelKeywords = ['\u65c5\u884c', '\u65c5\u6e38', '\u884c\u7a0b', '\u666f\u70b9', '\u9152\u5e97', '\u673a\u7968', '\u822a\u73ed', '\u9ad8\u94c1', '\u706b\u8f66', '\u81ea\u9a7e', 'trip', 'travel'];
-
-    const containsAny = (keywords: string[]) => keywords.some(k => lowerInput.includes(k));
+    const containsAny = (keywords: string[]) =>
+        keywords.some(keyword => {
+            if (/^[a-z0-9-]+$/.test(keyword)) {
+                return new RegExp('\\b' + keyword + '\\b', 'i').test(lowerInput);
+            }
+            return lowerInput.includes(keyword);
+        });
 
     const detectDomain = (): PlanDomain => {
         if (containsAny(learningKeywords)) return 'study';
@@ -328,7 +397,13 @@ export function detectDomainLocally(input: string): PlanDomain {
     const lifeKeywords = ['\u751f\u6d3b', '\u4e60\u60ef', '\u5065\u8eab', '\u996e\u98df', '\u4f5c\u606f', '\u4eba\u751f', 'life plan', 'habit'];
     const travelKeywords = ['\u65c5\u884c', '\u65c5\u6e38', '\u884c\u7a0b', '\u666f\u70b9', '\u9152\u5e97', '\u673a\u7968', '\u822a\u73ed', '\u9ad8\u94c1', '\u706b\u8f66', '\u81ea\u9a7e', 'trip', 'travel'];
 
-    const containsAny = (keywords: string[]) => keywords.some(k => lowerInput.includes(k));
+    const containsAny = (keywords: string[]) =>
+        keywords.some(keyword => {
+            if (/^[a-z0-9-]+$/.test(keyword)) {
+                return new RegExp('\\b' + keyword + '\\b', 'i').test(lowerInput);
+            }
+            return lowerInput.includes(keyword);
+        });
 
     if (containsAny(learningKeywords)) return 'study';
     if (containsAny(projectKeywords)) return 'project';
@@ -340,8 +415,29 @@ export function detectDomainLocally(input: string): PlanDomain {
 
 // Check if LLM is configured and ready
 export function isLLMConfigured(): boolean {
+    if (useServerKeys) return true;
     const config = loadAPIConfig();
     return Boolean(config.llm.apiKey && config.llm.baseUrl && config.llm.model);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -1,6 +1,16 @@
 // Amadeus Flight API Service
 import { loadAPIConfig } from '../types/apiConfig';
 
+const useServerKeys = (import.meta as { env?: Record<string, string> }).env?.VITE_USE_SERVER_KEYS === 'true';
+const apiBase = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE || '';
+const apiToken = (import.meta as { env?: Record<string, string> }).env?.VITE_API_TOKEN;
+
+function buildApiUrl(path: string, params?: URLSearchParams): string {
+    const prefix = apiBase ? apiBase.replace(/\/$/, '') : '';
+    const query = params ? `?${params.toString()}` : '';
+    return `${prefix}${path.startsWith('/') ? path : `/${path}`}${query}`;
+}
+
 // Airport codes for common cities
 const CITY_AIRPORT_CODES: Record<string, string> = {
     // China
@@ -69,6 +79,9 @@ let tokenExpiry: number = 0;
 
 // Get Amadeus OAuth token
 async function getAmadeusToken(): Promise<string | null> {
+    if (useServerKeys) {
+        return null;
+    }
     const config = loadAPIConfig();
 
     if (!config.amadeus.enabled || !config.amadeus.apiKey || !config.amadeus.apiSecret) {
@@ -108,6 +121,44 @@ async function getAmadeusToken(): Promise<string | null> {
     }
 }
 
+async function searchFlightsViaProxy(
+    origin: string,
+    destination: string,
+    departureDate: string,
+    returnDate?: string,
+    adults: number = 1
+): Promise<FlightSearchResult> {
+    const params = new URLSearchParams({
+        origin,
+        destination,
+        departureDate,
+        adults: String(adults),
+    });
+    if (returnDate) params.set('returnDate', returnDate);
+
+    const headers: Record<string, string> = {};
+    if (apiToken) headers['x-aether-token'] = apiToken;
+
+    const url = buildApiUrl('/api/flights', params);
+    try {
+        let response = await fetch(url, { headers });
+        if (!response.ok && !apiBase && typeof window !== 'undefined') {
+            const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+            if (isLocalhost) {
+                const fallbackUrl = `http://localhost:8787/api/flights?${params.toString()}`;
+                response = await fetch(fallbackUrl, { headers });
+            }
+        }
+        const data = await response.json().catch(() => ({} as Record<string, unknown>));
+        if (!response.ok) {
+            return { success: false, error: (data as { error?: string }).error || `http_${response.status}` };
+        }
+        return { success: true, flights: (data as { flights?: FlightOffer[] }).flights || [] };
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'flight_proxy_failed' };
+    }
+}
+
 // Get airport code for a city
 export function getAirportCode(city: string): string | null {
     return CITY_AIRPORT_CODES[city] || null;
@@ -121,6 +172,9 @@ export async function searchFlights(
     returnDate?: string,
     adults: number = 1
 ): Promise<FlightSearchResult> {
+    if (useServerKeys) {
+        return searchFlightsViaProxy(origin, destination, departureDate, returnDate, adults);
+    }
     const token = await getAmadeusToken();
 
     if (!token) {
@@ -213,6 +267,7 @@ export async function searchFlights(
 
 // Check if Amadeus is configured
 export function isAmadeusConfigured(): boolean {
+    if (useServerKeys) return true;
     const config = loadAPIConfig();
     return config.amadeus.enabled && Boolean(config.amadeus.apiKey && config.amadeus.apiSecret);
 }

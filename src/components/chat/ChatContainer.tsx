@@ -89,9 +89,13 @@ const ChatContainer: React.FC = () => {
 
     const resolvePlanDomain = (intent: string, detected?: PlanDomain): PlanDomain => {
         if (detected && detected !== 'other') return detected;
-        if (intent === 'plan_itinerary' && detected === 'other') return collectedData.planType || 'other';
+        if (intent === 'plan_itinerary') {
+            if (collectedData.planType && collectedData.planType !== 'other') return collectedData.planType;
+            if (collectedData.destination) return 'travel';
+            return 'other';
+        }
         if (['study', 'project', 'event', 'life'].includes(intent)) return intent as PlanDomain;
-        if (['travel', 'hotel', 'flight', 'train', 'map', 'attraction', 'plan_itinerary'].includes(intent)) return 'travel';
+        if (['travel', 'hotel', 'flight', 'train', 'map', 'attraction'].includes(intent)) return 'travel';
         return collectedData.planType || 'other';
     };
 

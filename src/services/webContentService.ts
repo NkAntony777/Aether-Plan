@@ -19,14 +19,16 @@ export async function fetchWebPage(url: string): Promise<WebPageResponse> {
     const params = new URLSearchParams({ url });
     const base = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE || '';
     const primaryUrl = buildUrl(base, params);
+    const token = (import.meta as { env?: Record<string, string> }).env?.VITE_API_TOKEN;
+    const headers = token ? { 'x-aether-token': token } : undefined;
 
     try {
-        let response = await fetch(primaryUrl);
+        let response = await fetch(primaryUrl, { headers });
         if (!response.ok && !base && typeof window !== 'undefined') {
             const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
             if (isLocalhost) {
                 const fallbackUrl = buildUrl('http://localhost:8787', params);
-                response = await fetch(fallbackUrl);
+                response = await fetch(fallbackUrl, { headers });
             }
         }
 

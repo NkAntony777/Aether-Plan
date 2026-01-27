@@ -48,15 +48,17 @@ export async function searchWeb(query: string, options: SearchOptions = {}): Pro
 
     const base = (import.meta as { env?: Record<string, string> }).env?.VITE_API_BASE || '';
     const primaryUrl = buildSearchUrl(base, params);
+    const token = (import.meta as { env?: Record<string, string> }).env?.VITE_API_TOKEN;
+    const headers = token ? { 'x-aether-token': token } : undefined;
 
     try {
-        let response = await fetch(primaryUrl);
+        let response = await fetch(primaryUrl, { headers });
         if (!response.ok && !base && typeof window !== 'undefined') {
             // Fallback to local backend when dev proxy is not available
             const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
             if (isLocalhost) {
                 const fallbackUrl = buildSearchUrl('http://localhost:8787', params);
-                response = await fetch(fallbackUrl);
+                response = await fetch(fallbackUrl, { headers });
             }
         }
 
