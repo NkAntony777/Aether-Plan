@@ -80,7 +80,7 @@ Aether Plan understands different domains and adapts its assistance accordingly:
 <a name="chinese"></a>
 ## 🇨🇳 中文介绍
 
-**Aether Plan (天宫计划)** 不仅仅是一个旅行助手，它是您的 **AI 全能规划师**。无论您是计划一场复杂的跨国旅行、筹备大型活动、管理团队项目，还是设定个人生活目标，Aether Plan 都能提供智能、情境感知的全方位支持。
+**Aether Plan (以太计划)** 不仅仅是一个旅行助手，它是您的 **AI 全能规划师**。无论您是计划一场复杂的跨国旅行、筹备大型活动、管理团队项目，还是设定个人生活目标，Aether Plan 都能提供智能、情境感知的全方位支持。
 
 ### ✨ 万物皆可规划
 
