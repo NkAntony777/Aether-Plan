@@ -22,6 +22,10 @@ import ResourceListWidget from '../components/widgets/ResourceListWidget';
 import RadioCardsWidget from '../components/widgets/RadioCardsWidget';
 import TextInputWidget from '../components/widgets/TextInputWidget';
 
+// Import Interactable Components
+import MapWidgetInteractable from './interactables/MapWidgetInteractable';
+import ChecklistWidgetInteractable from './interactables/ChecklistWidgetInteractable';
+
 // Import Zod schemas
 import {
   MapWidgetPayloadSchema,
@@ -269,4 +273,23 @@ export const utilityWidgets: TamboComponent[] = [
   TamboResourceListWidget,
   TamboRadioCardsWidget,
   TamboTextInputWidget,
+];
+
+// ============================================================================
+// Interactable Component Exports
+// ============================================================================
+
+/**
+ * Interactable components that can be controlled by AI in real-time.
+ * These are wrapped with withTamboInteractable HOC for dynamic updates.
+ */
+export { MapWidgetInteractable, ChecklistWidgetInteractable };
+
+/**
+ * Array of interactable component wrappers.
+ * Use these when you need AI to be able to control component state/props.
+ */
+export const interactableWidgets = [
+  MapWidgetInteractable,
+  ChecklistWidgetInteractable,
 ];

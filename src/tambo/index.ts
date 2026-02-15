@@ -32,6 +32,9 @@ export type { AetherTamboProviderProps } from './provider';
 // MCP Servers - Optional MCP server configuration
 export * from './mcp-servers';
 
+// Interactables - AI-controllable component wrappers
+export * from './interactables';
+
 // Re-export common Tambo types for convenience
 export type {
   TamboThread,

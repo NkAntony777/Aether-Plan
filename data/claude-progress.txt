@@ -1,0 +1,56 @@
+# Project Progress Log
+
+## Session 2026-02-15 (Task 12)
+
+### Completed
+- Task 12: Implement Interactable component wrappers for MapWidget and ChecklistWidget
+  - Created `src/tambo/interactables/MapWidgetInteractable.tsx`
+    - Wraps MapWidget with `withTamboInteractable` HOC
+    - Defines propsSchema for AI-driven map updates (center, zoom, locations)
+    - AI can now control map center, zoom level, and location markers in real-time
+  - Created `src/tambo/interactables/ChecklistWidgetInteractable.tsx`
+    - Wraps ChecklistWidget with `withTamboInteractable` HOC
+    - Defines propsSchema and stateSchema for AI-driven checklist updates
+    - AI can add/remove checklist items and track user selections
+  - Created `src/tambo/interactables/index.ts` - exports all interactable components
+  - Updated `src/tambo/components.ts` to export interactable components
+
+### Verification
+- TypeScript compilation: PASSED (no errors)
+- Interactable files have no lint errors
+
+### Remaining Tasks (3 pending)
+- Task 14: End-to-end testing - Verify travel planning workflow
+- Task 15: Update CLAUDE.md with Tambo integration docs
+
+### Notes
+- All Tambo integration setup tasks (1-13) are now complete
+- The interactable system allows AI to control component props/state in real-time
+- Next priority should be Task 14 (end-to-end testing) to verify the full workflow
+
+---
+
+## Session 2026-02-14
+
+### Completed
+- (None yet)
+
+### Issues Identified
+- 26 lint errors across multiple files (not related to Tambo integration)
+- Unused imports in several files
+- react-refresh warnings in provider.tsx (cosmetic, not blocking)
+
+### Tasks Queued (10 tasks)
+1. Fix lint errors in useSmartChat.ts
+2. Fix lint errors in smartRouter.ts
+3. Fix lint errors in aiService.ts
+4. Fix lint errors in llm/index.ts
+5. Fix lint errors in smartChatService.ts
+6. Remove duplicate extractDestination function
+7. Review/remove unused LLMChatExample.tsx
+8. Refactor large ChatContainer.tsx
+9. Verify lint passes
+10. Verify build succeeds
+
+### Next
+- Task 14: End-to-end testing - Verify travel planning workflow
