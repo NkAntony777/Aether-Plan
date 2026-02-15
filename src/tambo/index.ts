@@ -12,12 +12,10 @@
 export * from './schemas';
 
 // Components - Tambo-wrapped widget components
-// Will be exported from ./components when implemented
-// export * from './components';
+export * from './components';
 
 // Tools - Local AI tools (searchFlights, searchTrains, etc.)
-// Will be exported from ./tools when implemented
-// export * from './tools';
+export * from './tools';
 
 // Provider - TamboProvider configuration
 // Will be exported from ./provider when implemented
