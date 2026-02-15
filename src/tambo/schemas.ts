@@ -414,7 +414,7 @@ export const CollectedDataSchema = z.object({
   })).optional().describe('Web sources used'),
   planType: z.enum(['travel', 'study', 'project', 'event', 'life', 'other']).optional().describe('Type of plan'),
   goal: z.string().optional().describe('Planning goal'),
-  domainSlots: z.record(z.unknown()).optional().describe('Domain-specific data slots'),
+  domainSlots: z.record(z.string(), z.unknown()).optional().describe('Domain-specific data slots'),
 });
 
 // ============================================================================
