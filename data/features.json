@@ -1,0 +1,67 @@
+{
+  "project": "Aether Plan",
+  "description": "AI-powered Universal Planner for travel, study, projects, events, and life goals",
+  "features": [
+    {
+      "category": "core",
+      "description": "Chat interface with AI-powered conversation",
+      "steps": [
+        "ChatContainer component",
+        "MessageBubble component",
+        "InputArea component",
+        "Auto-scroll behavior"
+      ],
+      "passes": false
+    },
+    {
+      "category": "functional",
+      "description": "Smart intent detection for user queries",
+      "steps": [
+        "Travel intent detection",
+        "Hotel search intent",
+        "Flight search intent",
+        "Train search intent",
+        "Map/route planning intent"
+      ],
+      "passes": false
+    },
+    {
+      "category": "widgets",
+      "description": "Interactive planning widgets",
+      "steps": [
+        "MapWidget with Amap integration",
+        "HotelSearchWidget",
+        "FlightResultsWidget",
+        "TrainResultsWidget",
+        "DateRangeWidget"
+      ],
+      "passes": false
+    },
+    {
+      "category": "integration",
+      "description": "External service integrations",
+      "steps": [
+        "Amap (HighNavi) - POI search, geocoding, routing",
+        "12306 - Chinese train tickets",
+        "Amadeus - Global flights",
+        "LLM providers - Ollama, OpenAI, Claude"
+      ],
+      "passes": false
+    },
+    {
+      "category": "state",
+      "description": "Zustand state management",
+      "steps": [
+        "Chat message store",
+        "Widget state store",
+        "User preferences store"
+      ],
+      "passes": false
+    }
+  ],
+  "metadata": {
+    "created": "2026-02-14",
+    "total_features": 5,
+    "completed": 0
+  }
+}

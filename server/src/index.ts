@@ -460,7 +460,7 @@ app.post("/api/llm/chat", async (req, res) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch(`${LLM_BASE_URL.replace(/\\/$/, "")}/chat/completions`, {
+    const response = await fetch(`${LLM_BASE_URL.replace(/\/$/, "")}/chat/completions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -559,20 +559,22 @@ app.get("/api/amap/poi", async (req, res) => {
       res.status(502).json({ error: data.info || "poi_failed" });
       return;
     }
-    const pois = (data.pois || []).map((poi: any) => {
-      const [lng, lat] = (poi.location || "0,0").split(",").map(Number);
+    const pois = (data.pois || []).map((poi: unknown) => {
+      const poiRecord = poi as Record<string, unknown>;
+      const [lng, lat] = ((poiRecord.location as string) || "0,0").split(",").map(Number);
+      const bizExt = poiRecord.biz_ext as Record<string, string> | undefined;
       return {
-        id: poi.id,
-        name: poi.name,
-        type: poi.type,
-        typecode: poi.typecode,
-        address: poi.address || "",
+        id: poiRecord.id as string,
+        name: poiRecord.name as string,
+        type: poiRecord.type as string,
+        typecode: poiRecord.typecode as string,
+        address: (poiRecord.address as string) || "",
         location: { lat, lng },
-        tel: poi.tel,
-        rating: poi.biz_ext ? parseFloat(poi.biz_ext.rating || "0") : undefined,
-        cost: poi.biz_ext ? poi.biz_ext.cost : undefined,
-        photos: poi.photos ? poi.photos.map((p: any) => p.url) : undefined,
-        distance: poi.distance ? parseInt(poi.distance, 10) : undefined,
+        tel: poiRecord.tel as string | undefined,
+        rating: bizExt ? parseFloat(bizExt.rating || "0") : undefined,
+        cost: bizExt?.cost,
+        photos: poiRecord.photos ? (poiRecord.photos as Array<{url: string}>).map((p) => p.url) : undefined,
+        distance: poiRecord.distance ? parseInt(poiRecord.distance as string, 10) : undefined,
       };
     });
     res.json({ pois });
@@ -603,7 +605,7 @@ app.get("/api/amap/around", async (req, res) => {
       res.status(502).json({ error: data.info || "around_failed" });
       return;
     }
-    const items = (data.pois || []).map((poi: any) => ({
+    const items = (data.pois || []).map((poi: {name: string; distance: string}) => ({
       name: poi.name,
       distance:
         parseInt(poi.distance, 10) >= 1000
@@ -684,36 +686,37 @@ app.get("/api/flights", async (req, res) => {
       res.status(502).json({ error: data.errors?.[0]?.detail || "flight_search_failed", status: response.status });
       return;
     }
-    const flights = (data.data || []).map((offer: any, index: number) => {
-      const itineraries = offer.itineraries || [];
+    const flights = (data.data || []).map((offer: Record<string, unknown>, index: number) => {
+      const offerRecord = offer as Record<string, unknown>;
+      const itineraries = (offerRecord.itineraries as Array<Record<string, unknown>>) || [];
       const firstItinerary = itineraries[0] || {};
-      const segments = firstItinerary.segments || [];
+      const segments = (firstItinerary.segments as Array<Record<string, unknown>>) || [];
       const firstSegment = segments[0] || {};
       const lastSegment = segments[segments.length - 1] || firstSegment;
-      const price = offer.price || {};
+      const price = (offerRecord.price as Record<string, string>) || {};
       return {
         id: `flight-${index}`,
-        airline: firstSegment.carrierCode || "Unknown",
-        airlineCode: firstSegment.carrierCode || "",
-        flightNumber: `${firstSegment.carrierCode || ""}${firstSegment.number || ""}`,
+        airline: (firstSegment.carrierCode as string) || "Unknown",
+        airlineCode: (firstSegment.carrierCode as string) || "",
+        flightNumber: `${(firstSegment.carrierCode as string) || ""}${(firstSegment.number as string) || ""}`,
         departure: {
-          airport: firstSegment.departure?.iataCode || "",
-          time: firstSegment.departure?.at || "",
-          terminal: firstSegment.departure?.terminal,
+          airport: ((firstSegment.departure as Record<string, string>)?.iataCode) || "",
+          time: ((firstSegment.departure as Record<string, string>)?.at) || "",
+          terminal: (firstSegment.departure as Record<string, string>)?.terminal,
         },
         arrival: {
-          airport: lastSegment.arrival?.iataCode || "",
-          time: lastSegment.arrival?.at || "",
-          terminal: lastSegment.arrival?.terminal,
+          airport: ((lastSegment.arrival as Record<string, string>)?.iataCode) || "",
+          time: ((lastSegment.arrival as Record<string, string>)?.at) || "",
+          terminal: (lastSegment.arrival as Record<string, string>)?.terminal,
         },
-        duration: (firstItinerary.duration || "").replace("PT", "").toLowerCase(),
+        duration: ((firstItinerary.duration as string) || "").replace("PT", "").toLowerCase(),
         stops: Math.max(0, segments.length - 1),
         price: {
           amount: parseFloat(price.total || "0"),
           currency: price.currency || "CNY",
         },
         cabinClass:
-          offer.travelerPricings?.[0]?.fareDetailsBySegment?.[0]?.cabin || "ECONOMY",
+          ((offerRecord.travelerPricings as Array<Record<string, unknown>>)?.[0] as Record<string, unknown>)?.fareDetailsBySegment?.[0]?.cabin as string || "ECONOMY",
       };
     });
     res.json({ flights });

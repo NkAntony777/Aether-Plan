@@ -45,6 +45,7 @@ export const mockTrains: TrainResult[] = [
     { train_no: 'G14', start_train_code: 'G14', start_time: '12:00', arrive_time: '16:28', price: 553 },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getMockTrains = (_origin: string, _destination: string): TrainResult[] => {
     return mockTrains;
 };
@@ -166,10 +167,12 @@ export const getMockHotels = (destination: string): PlaceInfo[] => {
     }));
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getMockAttractions = (_destination: string): PlaceInfo[] => {
     return mockAttractions;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getMockRestaurants = (_destination: string): PlaceInfo[] => {
     return mockRestaurants;
 };

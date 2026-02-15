@@ -8,6 +8,7 @@ import { Compass, Settings, PanelLeft, FileDown, Image as ImageIcon, Plus, Clock
 import { motion } from 'framer-motion';
 import { mockAttractions, mockRestaurants } from '../../services/mockResponses';
 import { callLLM, isLLMConfigured, detectIntentLocally, detectDomainLocally, extractDestination, type ChatMessage, type PlanDomain } from '../../services/llmService';
+import type { FlightResult, PlaceInfo } from '../../types/message';
 import { searchFlights, isAmadeusConfigured, getAirportCode, type FlightOffer } from '../../services/flightService';
 import { searchTickets, type TicketInfo } from '../../services/trainLogic';
 import { geocodeCity } from '../../services/geocodingService';
@@ -28,6 +29,7 @@ const ChatContainer: React.FC = () => {
             .filter(message => message.type === 'text')
             .map(message => ({ role: message.role, content: message.content }));
         setConversationHistory(history);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentSessionId, messages.length]);
 
     // Get coordinates for a city (prefers Amap if configured, fallback to OSM)
@@ -1265,7 +1267,7 @@ const ChatContainer: React.FC = () => {
 
                 const flight = response as FlightOffer;
                 if (!isReturn) {
-                    updateCollectedData('selectedFlight', flight as any);
+                    updateCollectedData('selectedFlight', flight as unknown as FlightResult);
                     updateCollectedData('transportMode', 'flight');
                 }
 
@@ -1853,7 +1855,7 @@ const ChatContainer: React.FC = () => {
                 const hotel = response as { name: string; price?: number };
 
                 // Save selection to global state
-                updateCollectedData('selectedHotel', { ...hotel, id: 'temp', category: 'hotel' } as any);
+                updateCollectedData('selectedHotel', { ...hotel, id: 'temp', category: 'hotel' } as PlaceInfo);
 
                 addAssistantMessage(`太棒了！已为您选好 **${hotel.name}**${hotel.price ? ` (¥${hotel.price}起)` : ''}。\n\n您现在可以：\n• 输入 "景点" 查看热门景点\n• 输入 "地图" 查看目的地地图\n• 或者告诉我其他需求～`);
                 await askOpenMap();
@@ -1863,7 +1865,7 @@ const ChatContainer: React.FC = () => {
                 const hotel = response as { name: string };
 
                 // Save selection to global state
-                updateCollectedData('selectedHotel', { ...hotel, id: 'temp', category: 'hotel' } as any);
+                updateCollectedData('selectedHotel', { ...hotel, id: 'temp', category: 'hotel' } as PlaceInfo);
 
                 addAssistantMessage(`太棒了！已为您选好 **${hotel.name}**。\n\n您现在可以：\n• 输入 "景点" 查看热门景点\n• 输入 "地图" 查看目的地地图\n• 或者告诉我其他需求～`);
                 await askOpenMap();

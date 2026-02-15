@@ -60,6 +60,7 @@ const TILE_CONFIGS = {
     },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MapWidget: React.FC<MapWidgetProps> = ({ payload, onSubmit: _onSubmit }) => {
     const {
         center = { lat: 39.9042, lng: 116.4074 }, // Beijing default

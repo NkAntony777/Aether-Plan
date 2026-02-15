@@ -293,7 +293,7 @@ export const fullMcpConfiguration: McpConfiguration = createMcpConfiguration(
  */
 export function getMcpConfigFromEnv(): McpConfiguration {
   const mcpEnabled = import.meta.env.VITE_MCP_ENABLED === 'true';
-  const mcpServers = import.meta.env.VITE_MCP_SERVERS?.split(',').map((s) =>
+  const mcpServers = import.meta.env.VITE_MCP_SERVERS?.split(',').map((s: string) =>
     s.trim()
   );
 
@@ -302,14 +302,14 @@ export function getMcpConfigFromEnv(): McpConfiguration {
   if (mcpServers && mcpServers.length > 0) {
     // Use specified servers
     servers = mcpServers
-      .map((id) => {
+      .map((id: string) => {
         const server = getMcpServerById(id);
         if (server) {
           return { ...server, enabled: true };
         }
         return null;
       })
-      .filter((s): s is McpServerConfig => s !== null);
+      .filter((s: McpServerConfig | null): s is McpServerConfig => s !== null);
   } else {
     // Use default enabled servers
     servers = getEnabledMcpServers();

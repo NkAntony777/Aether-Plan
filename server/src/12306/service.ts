@@ -1110,7 +1110,7 @@ function extractStationRawData(stationNameJs: string): string {
   if (singleMatch) {
     return singleMatch[1];
   }
-  const doubleMatch = stationNameJs.match(/station_names\s*=\s*\"([^\"]+)\"/);
+  const doubleMatch = stationNameJs.match(/station_names\s*=\s*"([^"]+)"/);
   if (doubleMatch) {
     return doubleMatch[1];
   }

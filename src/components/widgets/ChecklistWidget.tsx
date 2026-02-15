@@ -16,7 +16,7 @@ interface ChecklistWidgetProps {
         items: ChecklistItem[];
         selectable?: boolean;
     };
-    onSubmit: (response: { selected: string[] }) => void;
+    onSubmit?: (response: { selected: string[] }) => void;
 }
 
 const ChecklistWidget: React.FC<ChecklistWidgetProps> = ({ payload, onSubmit }) => {
@@ -42,7 +42,7 @@ const ChecklistWidget: React.FC<ChecklistWidgetProps> = ({ payload, onSubmit }) 
         const chosen = Object.entries(selected)
             .filter(([, value]) => value)
             .map(([key]) => key);
-        onSubmit({ selected: chosen });
+        onSubmit?.({ selected: chosen });
     };
 
     return (

@@ -13,6 +13,7 @@ interface DateRangeWidgetProps {
     onSubmit: (response: { start: string; end: string }) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DateRangeWidget: React.FC<DateRangeWidgetProps> = ({ payload: _payload, onSubmit }) => {
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());

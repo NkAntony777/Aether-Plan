@@ -1,0 +1,13 @@
+﻿# Task 15
+
+Update CLAUDE.md with Tambo integration docs
+
+## 鎵ц姝ラ
+
+1. 鍏堣鍙栫浉鍏虫簮鏂囦欢浜嗚В浠ｇ爜搴?
+2. 杩涜蹇呰鐨勪慨鏀?
+3. 杩愯娴嬭瘯楠岃瘉
+4. 鎻愪氦鏇存敼: git add . && git commit -m "fix: Update CLAUDE.md with Tambo integration docs"
+5. 鏇存柊 data/tasks.json 涓换鍔?15 鐨勭姸鎬佷负 "completed"
+
+## 瀹屾垚鍚庤鐩存帴杈撳叆 "exit" 缁撴潫姝や細璇?

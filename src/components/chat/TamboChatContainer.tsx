@@ -18,6 +18,11 @@ import SettingsModal from '../settings/SettingsModal';
 import { cn } from '../../lib/utils';
 import type { ChatMessage } from '../../types/message';
 
+// Use settings modal through the store
+const SettingsModalWrapper: React.FC = () => {
+  return <SettingsModal />;
+};
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -71,9 +76,8 @@ const TamboChatContainer: React.FC<TamboChatContainerProps> = ({
   onNewThread,
   onSettingsOpen,
 }) => {
-  // Get API config store for potential future use
-  useAPIConfigStore();
-  const [showSettings, setShowSettings] = useState(false);
+  // Get API config store for settings modal control
+  const { openConfig } = useAPIConfigStore();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
 
   // Use the Tambo chat hook
@@ -122,9 +126,9 @@ const TamboChatContainer: React.FC<TamboChatContainerProps> = ({
 
   // Handle settings open
   const handleSettingsOpen = useCallback(() => {
-    setShowSettings(true);
+    openConfig();
     onSettingsOpen?.();
-  }, [onSettingsOpen]);
+  }, [openConfig, onSettingsOpen]);
 
   // Handle widget submit (for compatibility with existing widgets)
   const handleWidgetSubmit = useCallback(
@@ -174,18 +178,10 @@ const TamboChatContainer: React.FC<TamboChatContainerProps> = ({
             </button>
           </motion.div>
         </div>
-
-        <SettingsModal
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-        />
+        <SettingsModalWrapper />
       </div>
     );
   }
-
-  // ============================================================================
-  // Main Render
-  // ============================================================================
 
   return (
     <div className={cn('flex h-full bg-gradient-to-br from-stone-50 to-stone-100', className)}>
@@ -349,10 +345,7 @@ const TamboChatContainer: React.FC<TamboChatContainerProps> = ({
       </div>
 
       {/* Settings Modal */}
-      <SettingsModal
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
-      />
+      <SettingsModalWrapper />
     </div>
   );
 };

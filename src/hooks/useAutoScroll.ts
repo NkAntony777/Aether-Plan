@@ -18,6 +18,7 @@ export function useAutoScroll<T extends HTMLElement>(
         }, delay);
 
         return () => clearTimeout(timer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, dependency);
 
     return ref;

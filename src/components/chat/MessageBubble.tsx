@@ -52,25 +52,38 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onWidgetSubmit }
                         <ReactMarkdown
                             remarkPlugins={[remarkGfm]}
                             components={{
-                                p: ({ node, ...props }) => <p className="mb-4 last:mb-0" {...props} />,
-                                strong: ({ node, ...props }) => <span className="font-bold text-stone-900" {...props} />,
-                                em: ({ node, ...props }) => <span className="italic text-stone-600" {...props} />,
-                                ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-4 mb-4 space-y-2" {...props} />,
-                                ol: ({ node, ...props }) => <ol className="list-decimal list-outside ml-4 mb-4 space-y-2" {...props} />,
-                                li: ({ node, ...props }) => <li className="pl-1 leading-loose" {...props} />,
-                                code: ({ node, ...props }) => <code className="bg-stone-100 px-1 py-0.5 rounded text-sm text-stone-600 font-mono" {...props} />,
-                                table: ({ node, ...props }) => (
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                p: ({ node: _node, ...props }) => <p className="mb-4 last:mb-0" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                strong: ({ node: _node, ...props }) => <span className="font-bold text-stone-900" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                em: ({ node: _node, ...props }) => <span className="italic text-stone-600" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                ul: ({ node: _node, ...props }) => <ul className="list-disc list-outside ml-4 mb-4 space-y-2" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                ol: ({ node: _node, ...props }) => <ol className="list-decimal list-outside ml-4 mb-4 space-y-2" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                li: ({ node: _node, ...props }) => <li className="pl-1 leading-loose" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                code: ({ node: _node, ...props }) => <code className="bg-stone-100 px-1 py-0.5 rounded text-sm text-stone-600 font-mono" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                table: ({ node: _node, ...props }) => (
                                     <div className="overflow-x-auto -mx-2 md:mx-0 my-3">
                                         <table className="w-full border-collapse text-sm md:text-base" {...props} />
                                     </div>
                                 ),
-                                thead: ({ node, ...props }) => <thead className="bg-stone-50" {...props} />,
-                                tbody: ({ node, ...props }) => <tbody {...props} />,
-                                tr: ({ node, ...props }) => <tr className="even:bg-stone-50/40" {...props} />,
-                                th: ({ node, ...props }) => (
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                thead: ({ node: _node, ...props }) => <thead className="bg-stone-50" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                tbody: ({ node: _node, ...props }) => <tbody {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                tr: ({ node: _node, ...props }) => <tr className="even:bg-stone-50/40" {...props} />,
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                th: ({ node: _node, ...props }) => (
                                     <th className="border border-stone-200 px-4 py-3 text-left font-semibold text-stone-700 tracking-wide" {...props} />
                                 ),
-                                td: ({ node, ...props }) => (
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                                td: ({ node: _node, ...props }) => (
                                     <td className="border border-stone-200 px-4 py-3 align-top text-stone-700 leading-relaxed" {...props} />
                                 ),
                             }}
