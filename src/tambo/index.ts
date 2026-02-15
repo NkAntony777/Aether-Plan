@@ -30,8 +30,7 @@ export {
 export type { AetherTamboProviderProps } from './provider';
 
 // MCP Servers - Optional MCP server configuration
-// Will be exported from ./mcp-servers when implemented
-// export * from './mcp-servers';
+export * from './mcp-servers';
 
 // Re-export common Tambo types for convenience
 export type {
