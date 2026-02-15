@@ -9,8 +9,7 @@
  */
 
 // Schemas - Zod schemas for widget data validation
-// Will be exported from ./schemas when implemented
-// export * from './schemas';
+export * from './schemas';
 
 // Components - Tambo-wrapped widget components
 // Will be exported from ./components when implemented
