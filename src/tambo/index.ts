@@ -18,8 +18,16 @@ export * from './components';
 export * from './tools';
 
 // Provider - TamboProvider configuration
-// Will be exported from ./provider when implemented
-// export * from './provider';
+export {
+  AetherTamboProvider,
+  isTamboConfigured,
+  getTamboConfigStatus,
+  useTambo,
+  useTamboThreadInput,
+  useTamboThread,
+  useTamboThreadList,
+} from './provider';
+export type { AetherTamboProviderProps } from './provider';
 
 // MCP Servers - Optional MCP server configuration
 // Will be exported from ./mcp-servers when implemented
