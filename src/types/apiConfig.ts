@@ -131,6 +131,9 @@ export interface APIConfig {
         enabled: boolean;
         apiKey: string;
     };
+    tambo: {
+        enabled: boolean;
+    };
 }
 
 // Default configuration
@@ -149,6 +152,9 @@ export const DEFAULT_API_CONFIG: APIConfig = {
     amap: {
         enabled: false,
         apiKey: '',
+    },
+    tambo: {
+        enabled: false,
     },
 };
 

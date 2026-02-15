@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Key, Globe, Cpu, MapPin, Plane, ChevronDown, Check, AlertCircle, Zap, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { X, Key, Globe, Cpu, MapPin, Plane, ChevronDown, Check, AlertCircle, Zap, Loader2, CheckCircle, XCircle, Sparkles } from 'lucide-react';
 import { useAPIConfigStore } from '../../stores/apiConfigStore';
 import { LLM_PROVIDERS, type LLMProvider } from '../../types/apiConfig';
 import { cn } from '../../lib/utils';
@@ -19,6 +19,7 @@ const SettingsModal: React.FC = () => {
         updateLLMCustomModel,
         updateAmadeusConfig,
         updateAmapConfig,
+        updateTamboConfig,
         saveConfig,
     } = useAPIConfigStore();
 
@@ -374,6 +375,31 @@ const SettingsModal: React.FC = () => {
                                             <span>{testMessage}</span>
                                         </motion.div>
                                     )}
+                                </div>
+
+                                {/* Tambo Mode Toggle */}
+                                <div className="pt-4 border-t border-stone-100">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <label className="text-sm font-medium text-stone-700 flex items-center gap-2">
+                                                <Sparkles className="w-4 h-4" />
+                                                Tambo 模式
+                                            </label>
+                                            <p className="text-xs text-stone-400 mt-1 ml-6">使用 Tambo AI 代理进行对话和工具调用</p>
+                                        </div>
+                                        <button
+                                            onClick={() => updateTamboConfig({ enabled: !config.tambo.enabled })}
+                                            className={cn(
+                                                'w-12 h-6 rounded-full transition-colors relative',
+                                                config.tambo.enabled ? 'bg-sage-500' : 'bg-stone-200'
+                                            )}
+                                        >
+                                            <span className={cn(
+                                                'absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform',
+                                                config.tambo.enabled ? 'translate-x-6' : 'translate-x-0.5'
+                                            )} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}

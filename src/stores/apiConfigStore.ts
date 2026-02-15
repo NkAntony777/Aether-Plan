@@ -22,6 +22,7 @@ interface APIConfigState {
     updateLLMCustomModel: (model: string) => void;
     updateAmadeusConfig: (config: Partial<APIConfig['amadeus']>) => void;
     updateAmapConfig: (config: Partial<APIConfig['amap']>) => void;
+    updateTamboConfig: (config: Partial<APIConfig['tambo']>) => void;
     saveConfig: () => void;
     resetConfig: () => void;
 }
@@ -98,6 +99,15 @@ export const useAPIConfigStore = create<APIConfigState>((set, get) => ({
             config: {
                 ...state.config,
                 amap: { ...state.config.amap, ...amap },
+            },
+        }));
+    },
+
+    updateTamboConfig: (tambo: Partial<APIConfig['tambo']>) => {
+        set(state => ({
+            config: {
+                ...state.config,
+                tambo: { ...state.config.tambo, ...tambo },
             },
         }));
     },
